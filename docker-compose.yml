@@ -10,6 +10,8 @@ services:
     ports:
       - "9999:3000"
     volumes:
-      # 挂载宿主机当前目录下的 sbti.db 到容器内，确保统计数据持久化
-      # 注意：首次启动前，请务必在宿主机同级目录下执行 `touch sbti.db` 创建空文件
-      - ./sbti.db:/app/sbti.db
+      # 挂载数据目录，确保统计数据持久化
+      - sbti-data:/app/data
+
+volumes:
+  sbti-data:

@@ -1,8 +1,13 @@
 import Database from 'better-sqlite3';
 import path from 'path';
+import fs from 'fs';
 
-// Store DB file in the project root
-const dbPath = path.join(process.cwd(), 'sbti.db');
+// Store DB file in the data directory (writable in Docker)
+const dataDir = path.join(process.cwd(), 'data');
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+const dbPath = path.join(dataDir, 'sbti.db');
 const db = new Database(dbPath);
 
 // Initialize table

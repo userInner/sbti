@@ -38,17 +38,15 @@ RUN adduser --system --uid 1001 nextjs
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-# Initialize sqlite DB in a directory Next.js can write to
-# Note: For production with persistent data, it's better to mount a volume
-# to store the SQLite DB, but we keep it inside the app dir for simplicity.
-# It is better to use an external DB or Vercel KV for real production.
+# Create a writable data directory for SQLite
+RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/sbti.db ./sbti.db
+COPY --from=builder --chown=nextjs:nodejs /app/sbti.db /app/data/sbti.db
 
 USER nextjs
 
