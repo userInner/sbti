@@ -46,6 +46,14 @@ RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy better-sqlite3 native addon (excluded from bundle by serverExternalPackages)
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/better-sqlite3 ./node_modules/better-sqlite3
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/bindings ./node_modules/bindings
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/file-uri-to-path ./node_modules/file-uri-to-path
+COPY --from=builder --chown=nextjs:nodejs /app/node_modules/prebuild-install ./node_modules/prebuild-install
+
+# Seed DB file (will be overridden by volume mount if present)
 COPY --from=builder --chown=nextjs:nodejs /app/sbti.db /app/data/sbti.db
 
 USER nextjs
