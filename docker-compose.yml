@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   sbti-app:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     container_name: sbti-server
@@ -10,8 +10,4 @@ services:
     ports:
       - "9999:3000"
     volumes:
-      # 挂载数据目录，确保统计数据持久化
-      - sbti-data:/app/data
-
-volumes:
-  sbti-data:
+      - ./data:/app/data
